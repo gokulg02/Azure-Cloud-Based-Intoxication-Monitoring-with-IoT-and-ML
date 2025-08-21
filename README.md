@@ -15,3 +15,18 @@ This project is a scalable end-to-end machine learning system designed to predic
 - Fully **serverless and scalable** cloud architecture.  
 - **Real-time monitoring** of intoxication levels.  
  
+## Setup
+
+3. Deploying the web dashboard:
+
+    - Create a Ubuntu 22.04 VM on Azure cloud with all the SSH, HTTP and HTTPS ports exposed.
+    - SSH into the VM using `ssh azureuser@<your_vm_public_ip>`
+    - Download the deployment script using:
+        `curl -o deploy.sh https://raw.githubusercontent.com/gokulg02/Azure-Cloud-Based-Intoxication-Monitoring-with-IoT-and-ML/main/web_dashboard/deploy.sh`
+    - Replace the `SQL_CONN_STR` in `deploy.sh` using `nano deploy.sh`.
+    - Run the script using:
+        ```sh
+        chmod +x deploy.sh
+        sudo ./deploy.sh
+        ```
+    - The React front-end will be accesible at `http://<your_azure_vm_ip>`.
