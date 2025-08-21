@@ -17,6 +17,50 @@ This project is a scalable end-to-end machine learning system designed to predic
  
 ## Setup
 
+1.  Pipeline for ETL, feature engineering, and model training data preparation
+
+    -   First, set up Azure Blob Storage to hold the raw and processed data for the training pipeline.
+        -   Create an Azure Storage Account in the Azure portal.
+        -   Create two Blob Containers: `raw-data` for inputs and `processed-data` for the output.
+        -   Upload the training data into the `raw-data` container:
+            -   `/raw-data/all_accelerometer_data_pids_13.csv`: The main CSV file with all participant data.
+            -   `/raw-data/clean_tac/`: A folder containing the ground truth TAC reading files for each participant.
+    -   Next, create the Azure Function project on your local machine using VS Code.
+        -   Ensure you have the [Azure Functions](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions) VS Code extension installed.
+        -   Use the VS Code Command Palette (`Ctrl+Shift+P`) to run `Azure Functions: Create New Project...` and follow the prompts:
+
+            ```
+            Select a folder for your project.
+            Select a language: Choose Python.
+            Select a Python interpreter to create a virtual environment.
+            Select a template: Choose HTTP trigger.
+            Provide a function name: e.g., train_model.
+            Authorization level: Choose Anonymous.
+            ```
+        -   Replace the contents of the generated `function_app.py` and `requirements.txt` with the files from the `Training/` directory.
+        -   Add your Azure Storage connection string to the `local.settings.json` file:
+
+            ```json
+            {
+              "IsEncrypted": false,
+              "Values": {
+                "AzureWebJobsStorage": "Your_connection_string",
+                "FUNCTIONS_WORKER_RUNTIME": "python"
+              }
+            }
+            ```
+    -   Then, create the Function App resource in Azure which will host the code.
+        -   Run `Azure Functions: Create Function App in Azure...` from the Command Palette and follow the prompts:
+            ```
+            Enter a globally unique name for your Function App.
+            Select a runtime stack: Choose the same Python version you used locally.
+            Select a region for your resources (e.g., East US).
+            ```
+    -   Finally, deploy your local function code to the newly created Azure resource.
+        -   Run `Azure Functions: Deploy to Function App...` from the Command Palette.
+        -   Select the Function App you just created from the list to begin the deployment.
+
+
 2. Pipeline for capturing live data streaming from IoT device, running ML model to make predictions and storing results in SQL server
 
     - First, set up Azure IoT Hub to that listens for data from IoT devices.
