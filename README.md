@@ -14,6 +14,9 @@ This project is a scalable end-to-end machine learning system designed to predic
 - End-to-end **Azure Cloud-native** System.
 - Fully **serverless and scalable** cloud architecture.  
 - **Real-time monitoring** of intoxication levels.  
+
+ ## Demo
+ ![demo](sober-demo.gif)
  
 ## Setup
 
