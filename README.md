@@ -119,3 +119,8 @@ This project is a scalable end-to-end machine learning system designed to predic
         sudo ./deploy.sh
         ```
     - The React front-end will be accesible at `http://<your_azure_vm_ip>`.
+
+
+ ## Dataset
+
+ - Bar Crawl: Detecting Heavy Drinking. (2020). UCI Machine Learning Repository. https://doi.org/10.24432/C5TK6G.
