@@ -66,7 +66,37 @@ This project is a scalable end-to-end machine learning system designed to predic
         -   Select the Function App you just created from the list to begin the deployment.
 
 
-2. Pipeline for capturing live data streaming from IoT device, running ML model to make predictions and storing results in SQL server
+2.  Train and Deploy the Prediction Model using Azure AutoML
+
+    -   First, ensure you have an **Azure Machine Learning Workspace**. If not, create one in the Azure portal.
+    -   Next, create a **Dataset** in the AML Workspace from the processed data generated in Step 1.
+        -   In your AML Workspace, navigate to the **Data** section and click **Create**.
+        -   Choose to create a data asset **From local files**.
+        -   Name the dataset and select **Tabular** as the type.
+        -   For the data source, upload the `clean_data_new.csv` file from the `processed-data` container in your Blob Storage. Azure will guide you through the schema settings.
+    -   Now, train a classification model using **Automated ML**.
+        -   Navigate to the **Automated ML** section in the left-hand menu and start a **New Automated ML job**.
+        -   **Select the dataset** you just created.
+        -   In the **Configure job** screen:
+            -   Create a new experiment name.
+            -   Select `drunk` as the **target column** and remove columns such as Device id `pid` and timestamp `t`.
+            -   Select or create a **compute cluster** to run the training job.
+        -   For the **Task type**, choose **Classification** and click **Finish** to start the run. AutoML will now train and evaluate dozens of models.
+    -   Once the AutoML run is complete, **deploy the best model** to a real-time endpoint.
+        -   Click on the completed run, and in the **Models** tab, select the best performing model.
+        -   Click **Deploy** and choose **Deploy to real-time endpoint**.
+        -   Configure the endpoint:
+            -   Give it a unique name.
+            -   Select **Azure Container Instance (ACI)** as the compute type for easy deployment.
+            -   Ensure **Key-based authentication** is enabled.
+            -   Click **Deploy**. This process may take 5-10 minutes.
+    -   Finally, retrieve the **endpoint URL and primary key** for use in the next step.
+        -   Navigate to the **Endpoints** section in your AML Workspace.
+        -   Click on the endpoint you just deployed.
+        -   Go to the **Consume** tab. Copy the **REST endpoint** URL and the **Primary Key**.
+        -   These values will be used as the `AML_ENDPOINT_URL` and `AML_PRIMARY_KEY` environment variables in the next pipeline.
+          
+3. Pipeline for capturing live data streaming from IoT device, running ML model to make predictions and storing results in SQL server
 
     - First, set up Azure IoT Hub to that listens for data from IoT devices.
         - Create an Azure IoT Hub instance in your Azure portal.
@@ -108,7 +138,7 @@ This project is a scalable end-to-end machine learning system designed to predic
             -   `AML_PRIMARY_KEY`: The primary key for authenticating with the model endpoint.
 
 
-3. Deploying the web dashboard:
+4. Deploying the web dashboard:
 
     - Create a Ubuntu 22.04 VM on Azure cloud with the SSH, HTTP and HTTPS ports exposed.
     - SSH into the VM using `ssh azureuser@<your_vm_public_ip>`
