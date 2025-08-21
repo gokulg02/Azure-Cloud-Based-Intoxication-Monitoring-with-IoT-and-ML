@@ -17,7 +17,9 @@ This project is a scalable end-to-end machine learning system designed to predic
 
  ## Demo
  ![demo](sober-demo.gif)
- 
+
+ ## Workflow
+  ![flow](SOBER.png)
 ## Setup
 
 1.  Pipeline for ETL, feature engineering, and model training data preparation
